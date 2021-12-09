@@ -1,22 +1,20 @@
-# ===centos image===
-FROM centos:centos8
-
-RUN yum -y update
-
-RUN yum install python38 -y
-
-RUN pip3 install pika \
-    flask \
-    python-dotenv
-
-WORKDIR /root
-
-COPY . .
-
-EXPOSE 5000
-
+FROM python:3.7.2-alpine
+RUN pip install --upgrade pip
+RUN adduser -D worker
+USER worker
+ENV PATH="/home/worker/.local/bin:${PATH}"
+WORKDIR /home/worker
+RUN pip install --user pika flask python-dotenv
+COPY --chown=worker:worker . .
 ENTRYPOINT [ "python3", "jsonfilter.py" ]
 
+#FROM python:3.8-slim-buster
+#WORKDIR /opt/app
+#RUN pip3 install --upgrade pip && pip3 install --no-cache-dir pika flask python-dotenv
+#COPY . .
+#RUN adduser app
+#USER app
+#ENTRYPOINT [ "python3", "jsonfilter.py" ]
 
 
 # ===ubuntu image===
