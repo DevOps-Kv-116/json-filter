@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: json-filter
+    deployed: ${TF_VAR_project}
+  name: json-filter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: json-filter
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: json-filter
+    spec:
+      containers:
+        - env:
+            - name: HOST
+              value: 0.0.0.0
+            - name: PORT
+              value: "5000"
+            - name: QUEUE_RESTAPI
+              value: restapi
+            - name: QUEUE_SLACK
+              value: slack
+            - name: RMQ_HOST
+              value: rabbitmq
+            - name: RMQ_LOGIN
+              value: devops
+            - name: RMQ_PASS
+              value: softserve
+            - name: RMQ_PORT
+              value: "5672"
+          image: gcr.io/${TF_VAR_project}/json-filter
+          name: json-filter
+          ports:
+            - containerPort: 5000
+          resources: {}
+      restartPolicy: Always
+status: {}
+

@@ -18,5 +18,10 @@ pipeline {
                 sh '''docker push "gcr.io/${TF_VAR_project}/json-filter"'''
             }
         }
+        stage('Deploy') {
+            steps {
+                sh '''./deploy.sh''' 
+            }
+        }
     }
 }

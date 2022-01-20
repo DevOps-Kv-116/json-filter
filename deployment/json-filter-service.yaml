@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: json-filter
+    deployed: ${TF_VAR_project}
+  name: json-filter
+spec:
+  ports:
+    - name: "6000"
+      port: 6000
+      targetPort: 5000
+  selector:
+    app: json-filter
+  type: LoadBalancer
+status:
+  loadBalancer: {}
+
